@@ -1,6 +1,7 @@
 /node_modules
 /uploads
 /src/config/env.js
+package-lock.json
 
 # misc
 .DS_Store
