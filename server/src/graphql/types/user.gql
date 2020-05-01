@@ -1,0 +1,50 @@
+enum Roles {
+  ADMIN
+  USER
+}
+
+type User {
+  id: ID
+  name: String
+  username: String
+  email: String
+  password: String
+  created_at: Date
+  updated_at: Date
+  role: Roles
+  status: Boolean
+}
+type UserLogin {
+  id: ID
+  name: String
+  username: String
+  email: String
+  role: Roles
+}
+
+input UserInput {
+  name: String!
+  username: String!
+  email: String!
+  password: String!
+  created_at: Date
+  updated_at: Date
+  role: Roles
+}
+
+extend type Query {
+  getUsers(since: Int, limit: Int): [User]
+  getUser(id: ID): User
+  me: UserLogin
+}
+
+extend type Mutation {
+  createUser(input: UserInput!): Response
+  updateUser(id: ID!, input: UserInput!): Response
+  deleteUser(id: ID!): Response
+}
+
+extend type Subscription {
+  newUser: User!
+  updateUser: User!
+}

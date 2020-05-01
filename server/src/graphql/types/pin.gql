@@ -1,0 +1,41 @@
+type Pin {
+  _id: ID
+  createdAt: String
+  title: String
+  content: String
+  image: String
+  latitude: Float
+  longitude: Float
+  author: UserLogin
+  comments: [Comment]
+}
+
+type Comment {
+  text: String
+  createdAt: String
+  author: User
+}
+
+input CreatePinInput {
+  title: String
+  image: String
+  content: String
+  latitude: Float
+  longitude: Float
+}
+
+extend type Query {
+  getPins(since: Int, limit: Int): [Pin!]
+}
+
+extend type Mutation {
+  createPin(input: CreatePinInput!): Response
+  deletePin(id: ID!): Response
+  createComment(pinId: ID!, text: String!): Response
+}
+
+extend type Subscription {
+  newPin: Pin!
+  pinDeleted: Pin
+  pinUpdated: Pin
+}

@@ -1,0 +1,45 @@
+enum Unit {
+  PIECES
+  METER
+  KG
+}
+
+type Product {
+  id: ID
+  code: String
+  name: String
+  description: String
+  image: String
+  stock: Float
+  brand: String
+  unit: Unit
+  status: Boolean
+  created_at: Date
+  updated_at: Date
+}
+
+input ProductInput {
+  code: String!
+  name: String!
+  description: String
+  image: String
+  stock: Float!
+  brand: String
+  unit: Unit!
+}
+
+extend type Query {
+  getProducts(since: Int, limit: Int): [Product]
+  getProduct(id: ID!): Product
+}
+
+extend type Mutation {
+  createProduct(input: ProductInput!): Response
+  updateProduct(id: ID!, input: ProductInput!): Response
+  deleteProduct(id: ID!): Response
+}
+
+extend type Subscription {
+  newProduct: Product!
+  updateProduct: Product
+}

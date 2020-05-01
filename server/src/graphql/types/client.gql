@@ -1,0 +1,29 @@
+type Client {
+  id: ID
+  name: String
+  lastname: String
+  empresa: String
+  email: String
+  phone: String
+  created_at: Date
+  updated_at: Date
+  status: Boolean
+  user: ID
+}
+
+input ClientInput {
+  name: String!
+  lastname: String!
+  empresa: String!
+  email: String!
+  phone: String
+}
+
+extend type Mutation {
+  clientCreate(input: ClientInput!): Response
+}
+
+extend type Subscription {
+  newClient: Client!
+  updateClient: Client!
+}

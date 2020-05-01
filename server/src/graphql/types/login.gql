@@ -1,0 +1,16 @@
+"""
+Devuelve el token para la autenticación, el nombre y el rol de la persona
+"""
+type Login {
+  ok: Boolean
+  message: String
+  token: String
+  me: JSON
+}
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+extend type Mutation {
+  login(input: LoginUserInput!): Login!
+}
