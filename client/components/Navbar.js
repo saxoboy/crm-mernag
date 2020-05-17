@@ -1,7 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
-
-import { useQuery, gql } from "@apollo/client";
+import clsx from "clsx";
 
 /*MUI*/
 import { makeStyles } from "@material-ui/core/styles";
@@ -13,16 +12,16 @@ import Slide from "@material-ui/core/Slide";
 import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
 import IconButton from "@material-ui/core/IconButton";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+//import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import Divider from "@material-ui/core/Divider";
 
 const drawerWidth = 250;
 
 const useStyles = makeStyles((theme) => ({
-  
   appBarShift: {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -30,11 +29,11 @@ const useStyles = makeStyles((theme) => ({
   root: {
     paddingLeft: "0",
     [theme.breakpoints.up("sm")]: {
-      paddingLeft: "73px",
+      paddingLeft: "32px",
     },
     color: theme.palette.primary.contrastText,
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
+    zIndex: theme.zIndex.drawer - 1,
+    transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
@@ -45,31 +44,21 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-  },    
+  },
+  menuButton: {
+    marginRight: 16,
+  },
+  menuButtonHidden: {
+    display: "none",
+  },
   typography: {
     color: theme.palette.primary.contrastText,
   },
 }));
 
-const ME = gql`
-  query Me {
-    me {
-      id
-      name
-      username
-      email
-      role
-    }
-  }
-`;
-
 const Navbar = (props) => {
   const classes = useStyles();
   const router = useRouter(); // Routing
-  const { loading, data, error } = useQuery(ME)
-  if (loading) return null;
-  if (error) return null;
-  const { name, username } = data.me;
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -79,11 +68,15 @@ const Navbar = (props) => {
     <HideOnScroll {...props}>
       <AppBar position="absolute" className={classes.root}>
         <Toolbar className={classes.toolBar}>
-          <Typography variant="h6" className={classes.title} color="inherit" >
+          <Typography variant="h6" className={classes.title} color="inherit">
             Nombre Page
           </Typography>
           <Typography color="inherit">
-            Hola {name} (<Typography component="span" variant="caption" color="inherit">{username}</Typography>)
+            Hola {props.dataUser.name} (
+            <Typography component="span" variant="caption" color="inherit">
+              {props.dataUser.username}
+            </Typography>
+            )
           </Typography>
           <Divider
             variant="middle"
@@ -98,22 +91,11 @@ const Navbar = (props) => {
           >
             <ExitToAppIcon />
           </IconButton>
-          <Divider
-            variant="middle"
-            orientation="vertical"
-            flexItem
-          />
-          <IconButton
-            color="inherit"
-            aria-label="estado"
-          >
+          <Divider variant="middle" orientation="vertical" flexItem />
+          <IconButton color="inherit" aria-label="estado">
             <FormatListBulletedIcon />
-          </IconButton> 
-          <Divider
-            variant="middle"
-            orientation="vertical"
-            flexItem
-          />       
+          </IconButton>
+          <Divider variant="middle" orientation="vertical" flexItem />
         </Toolbar>
       </AppBar>
     </HideOnScroll>

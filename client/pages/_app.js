@@ -1,11 +1,16 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
+
 import { ApolloProvider } from "@apollo/client";
 import client from "../config/apollo";
+
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+
 import theme from "../theme";
+
+import { AuthProvider } from "../context/auth";
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
@@ -26,10 +31,13 @@ export default function MyApp(props) {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Component {...pageProps} />
+          <AuthProvider>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </AuthProvider>
         </ThemeProvider>
       </ApolloProvider>
     </>

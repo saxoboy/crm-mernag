@@ -37,10 +37,7 @@ export default {
           return null;
         }
         try {
-          return await user.findOne(
-            { status: true, _id: id },
-            "id name username email role"
-          );
+          return await user.findOne({ status: true, _id: id }, "id name username email role");
         } catch (err) {
           return { ok: false, message: err.message };
         }

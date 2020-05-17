@@ -8,6 +8,7 @@ import * as Yup from "yup";
 
 import { gql, useMutation } from "@apollo/client";
 
+/*MUI*/
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Typography,
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
     flexDirection: "column",
     justifyContent: "center",
-    backgroundColor: theme.palette.primary.dark
+    backgroundColor: theme.palette.primary.dark,
   },
   title: {
     flexGrow: 1,
@@ -50,7 +51,6 @@ const LOGIN = gql`
       ok
       message
       token
-      me
     }
   }
 `;
@@ -87,7 +87,7 @@ const Login = () => {
           setMensaje(data.login.message);
           const { token } = data.login;
           localStorage.setItem("token", token);
-          setTimeout(() => {  
+          setTimeout(() => {
             setMensaje(null);
             router.push("/");
           }, 2000);
@@ -115,74 +115,75 @@ const Login = () => {
       </Alert>
     );
   };
+  
   return (
     <div className={classes.root}>
       <Head>
         <title>Log In - MERNAG + Apollo + GraphQL</title>
       </Head>
-        <Container component="main" maxWidth="xs" className={classes.form}>
-          {mensaje && mostrarMensaje()}
-          <Typography variant="h4" component="h1" align="center">
-            Iniciar Sesión
-          </Typography>
+      <Container component="main" maxWidth="xs" className={classes.form}>
+        {mensaje && mostrarMensaje()}
+        <Typography variant="h4" component="h1" align="center">
+          Iniciar Sesión
+        </Typography>
 
-          <form onSubmit={formik.handleSubmit} style={{ margin: "1.25em 0 0" }}>
-            <TextField
-              onChange={formik.handleChange}
-              value={formik.values.email}
-              error={formik.errors.email ? true : false}
-              variant="outlined"
-              margin="normal"
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              required
-              fullWidth
-              autoFocus
-            />
+        <form onSubmit={formik.handleSubmit} style={{ margin: "1.25em 0 0" }}>
+          <TextField
+            onChange={formik.handleChange}
+            value={formik.values.email}
+            error={formik.errors.email ? true : false}
+            variant="outlined"
+            margin="normal"
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            required
+            fullWidth
+            autoFocus
+          />
 
-            <TextField
-              onChange={formik.handleChange}
-              value={formik.values.password}
-              error={formik.errors.password ? true : false}
-              variant="outlined"
-              margin="normal"
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              required
-              fullWidth
-            />
+          <TextField
+            onChange={formik.handleChange}
+            value={formik.values.password}
+            error={formik.errors.password ? true : false}
+            variant="outlined"
+            margin="normal"
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            required
+            fullWidth
+          />
 
-            <Box className={classes.paper} mb={1}>
-              <Button
-                className={classes.submit}
-                style={{ margin: "1.5em 0" }}
-                type="submit"
-                variant="contained"
-                color="primary"
-              >
-                Iniciar Sesión
-              </Button>
-            </Box>
+          <Box className={classes.paper} mb={1}>
+            <Button
+              className={classes.submit}
+              style={{ margin: "1.5em 0" }}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Iniciar Sesión
+            </Button>
+          </Box>
 
-            <Grid container>
-              <Grid item xs>
-                <Link href="#">
-                  <a>Forgot password?</a>
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/register">
-                  <a>{"Sign Up"}</a>
-                </Link>
-              </Grid>
+          <Grid container>
+            <Grid item xs>
+              <Link href="#">
+                <a>Forgot password?</a>
+              </Link>
             </Grid>
-          </form>
-        </Container>
+            <Grid item>
+              <Link href="/register">
+                <a>{"Sign Up"}</a>
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
+      </Container>
     </div>
   );
 };

@@ -3,8 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import clsx from "clsx";
 
-import { useQuery, gql } from "@apollo/client";
-
 /*MUI*/
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -19,7 +17,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import MoneyIcon from "@material-ui/icons/Money";
 import MenuIcon from "@material-ui/icons/Menu";
-import PersonIcon from "@material-ui/icons/Person";
+//import PersonIcon from "@material-ui/icons/Person";
 import PeopleIcon from "@material-ui/icons/People";
 import StoreIcon from "@material-ui/icons/Store";
 
@@ -105,25 +103,12 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(7),
     backgroundColor: theme.palette.background.paper,
   },
-  listItemIcon:{
+  listItemIcon: {
     paddingLeft: theme.spacing(1),
-  }
-  
+  },
 }));
 
-const ME = gql`
-  query Me {
-    me {
-      id
-      name
-      username
-      email
-      role
-    }
-  }
-`;
-
-const Sidebar = () => {
+const Sidebar = ({ dataUser }) => {
   const classes = useStyles();
   const router = useRouter();
   const [open, setOpen] = useState(true);
@@ -135,10 +120,7 @@ const Sidebar = () => {
     setOpen(false);
     //console.log("cerrado");
   };
-  const { loading, data, error } = useQuery(ME);
-  if (loading) return null;
-  if (error) return null;
-  const { name, email } = data.me;
+
   return (
     <nav>
       <Drawer
@@ -193,7 +175,7 @@ const Sidebar = () => {
           <div className={classes.user}>
             <div className={clsx(open ? "" : classes.hidden)}>
               <Typography align="center" className={classes.typography}>
-                {name}
+                {dataUser.name}
               </Typography>
               <Typography
                 align="center"
@@ -201,7 +183,7 @@ const Sidebar = () => {
                 component="p"
                 className={classes.typography}
               >
-                {email}
+                {dataUser.email}
               </Typography>
             </div>
 
@@ -235,26 +217,10 @@ const Sidebar = () => {
             </ListItem>
             <ListItem button>
               <ListItemIcon className={classes.listItemIcon}>
-                <StoreIcon />
-              </ListItemIcon>
-              <Link href="/order">
-                <ListItemText primary="Pedidos" />
-              </Link>
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon className={classes.listItemIcon}>
                 <PeopleIcon />
               </ListItemIcon>
               <Link href="/user">
                 <ListItemText primary="Usuarios" />
-              </Link>
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon className={classes.listItemIcon}>
-                <PersonIcon />
-              </ListItemIcon>
-              <Link href="/client">
-                <ListItemText primary="Clientes" />
               </Link>
             </ListItem>
           </List>
