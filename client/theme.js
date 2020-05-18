@@ -100,7 +100,7 @@ const theme = createMuiTheme({
     fontWeightRegular: 400,
     display1: {
       color: "rgba(0, 0, 0, 0.54)",
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      fontFamily: "'ABeeZee', 'Helvetica', 'Arial', sans-serif",
       lineHeight: "1.20588em",
       fontSize: "2.125rem",
       fontWeight: 400,
@@ -112,7 +112,7 @@ const theme = createMuiTheme({
       fontSize: "0.875rem",
       fontWeight: 500,
     },
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: "'ABeeZee', 'Helvetica', 'Arial', sans-serif",
     body2: {
       color: "rgba(0, 0, 0, 0.87)",
       fontFamily: "'ABeeZee', 'Helvetica', 'Arial', sans-serif",
@@ -122,7 +122,7 @@ const theme = createMuiTheme({
     },
     caption: {
       color: "rgba(0, 0, 0, 0.54)",
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      fontFamily: "'ABeeZee', 'Helvetica', 'Arial', sans-serif",
       lineHeight: "1.375em",
       fontSize: "0.75rem",
       fontWeight: 400,
@@ -131,14 +131,14 @@ const theme = createMuiTheme({
     fontWeightMedium: 500,
     title: {
       color: "rgba(0, 0, 0, 0.87)",
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      fontFamily: "'ABeeZee', 'Helvetica', 'Arial', sans-serif",
       lineHeight: "1.16667em",
       fontSize: "1.3125rem",
       fontWeight: 500,
     },
     subheading: {
       color: "rgba(0, 0, 0, 0.87)",
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      fontFamily: "'ABeeZee', 'Helvetica', 'Arial', sans-serif",
       lineHeight: "1.5em",
       fontSize: "1rem",
       fontWeight: 400,
