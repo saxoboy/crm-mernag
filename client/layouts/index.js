@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 
-// Apollo
-import { useQuery, gql } from "@apollo/client";
+import { useQuery } from "@apollo/client";
+import { ME } from "../graphql/auth/query";
 
 //Components
 import Navbar from "../components/Navbar";
@@ -10,53 +10,32 @@ import Sidebar from "../components/Sidebar";
 import Main from "../components/Main";
 
 //Context
-//import { AuthContext } from "../context/auth"
+import { AuthContext } from "../context/auth";
 
 /* MUI */
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-}));
-
-const ME = gql`
-  query Me {
-    me {
-      id
-      name
-      username
-      email
-      role
-    }
-  }
-`;
-
 const Layout = ({ children }) => {
-  const classes = useStyles();
+  const classes = useStyles(); // clases de styles
   const router = useRouter(); // routing
+  const context = useContext(AuthContext);
 
-  const { data, loading, error } = useQuery(ME);
-
-  if (loading && !error) {
-    //console.log("Cargando...");
-    return <p>Cargando...</p>;
-  }
-  if (error && !loading) {
-    console.log("No hay privilegios...");
+  const { loading, data, error } = useQuery(ME);
+  if (loading) return "Cargando...";
+  if (error) {
+    console.log(error.message.replace("GraphQL error: ", ""));
     router.push("/login");
-    return null
+    return null;
   }
-  // if (data && !error && !loading) {
-  //   console.log(data);
-  // }
+  if (data) {
+    context.user = data.me;
+  }
   return (
     <>
       <div className={classes.root}>
-        <Navbar dataUser={data.me} />
-        <Sidebar dataUser={data.me} />
-        <Main dataUser={data.me}>{children}</Main>
+        <Navbar />
+        <Sidebar />
+        <Main user={data.me}>{children}</Main>
       </div>
     </>
   );
@@ -64,17 +43,8 @@ const Layout = ({ children }) => {
 
 export default Layout;
 
-/*
-forms: {
+const useStyles = makeStyles((theme) => ({
+  root: {
     display: "flex",
-    height: "calc(100vh - 100px)",
-    flexDirection: "column",
-    justifyContent: "center",
   },
-
-{router.pathname === "/login" ? (
-        <div className={classes.forms}>
-          <Main>{children}</Main>
-        </div>
-      ) : (
-*/
+}));

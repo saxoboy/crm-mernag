@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import Head from "next/head";
 
 import { ApolloProvider } from "@apollo/client";
 import client from "../config/apollo";
@@ -24,14 +23,6 @@ export default function MyApp(props) {
 
   return (
     <>
-      <Head>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
           <AuthProvider>

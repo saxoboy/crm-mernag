@@ -6,9 +6,7 @@ export default {
     async login(root, { input }, { models: { user } }) {
       let { email, password } = input;
       try {
-        let User = await user.findOne(
-          { email },
-          "name password role" //"id role name username email password"
+        let User = await user.findOne({ email }, "id role name username email password" //"id role name username email password"
         );
 
         if (User && bcrypt.compareSync(password, User.password)) {
@@ -16,13 +14,13 @@ export default {
             ok: true,
             message: "Authenticated",
             token: getToken({ user: User.id, role: User.role }),
-            // me: {
-            //   user: User.id,
-            //   role: User.role,
-            //   name: User.name,
-            //   username: User.username,
-            //   email: User.email,
-            // },
+            me: {
+              user: User.id,
+              role: User.role,
+              name: User.name,
+              username: User.username,
+              email: User.email,
+            },
           };
         } else
           return {

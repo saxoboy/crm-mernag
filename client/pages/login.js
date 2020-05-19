@@ -1,50 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import { gql, useMutation } from "@apollo/client";
 
+import { AuthContext } from "../context/auth";
+
 /*MUI*/
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Typography,
-  Container,
-  TextField,
-  Box,
-  Button,
-  Grid,
-} from "@material-ui/core";
+import { Typography, Container, TextField, Box, Button, Grid } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    height: "100vh",
-    flexDirection: "column",
-    justifyContent: "center",
-    backgroundColor: theme.palette.primary.dark,
-  },
-  title: {
-    flexGrow: 1,
-  },
-  form: {
-    backgroundColor: "#f2f2f2",
-    padding: theme.spacing(5),
-    borderRadius: theme.spacing(2),
-  },
-  paper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
 const LOGIN = gql`
   mutation login($input: LoginUserInput!) {
     login(input: $input) {
@@ -57,9 +26,9 @@ const LOGIN = gql`
 
 const Login = () => {
   const classes = useStyles();
-  const router = useRouter(); // routing
   const [mensaje, setMensaje] = useState(null); // state de Mensaje
-  const [login] = useMutation(LOGIN); // Mutation para hacere Login
+  const [login] = useMutation(LOGIN); // Mutation para hacer Login
+  const context = useContext(AuthContext);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -83,14 +52,14 @@ const Login = () => {
           },
         });
 
-        if (data.login.ok) {
-          setMensaje(data.login.message);
-          const { token } = data.login;
-          localStorage.setItem("token", token);
+        const { ok, message, token} = data.login;
+
+        if (ok) {
+          setMensaje(message);
+          context.login(token);
           setTimeout(() => {
             setMensaje(null);
-            router.push("/");
-          }, 2000);
+          }, 1000);
         } else {
           setMensaje(
             data.login.message.replace("User validation failed: ", "")
@@ -115,7 +84,7 @@ const Login = () => {
       </Alert>
     );
   };
-  
+
   return (
     <div className={classes.root}>
       <Head>
@@ -189,3 +158,29 @@ const Login = () => {
 };
 
 export default Login;
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    height: "100vh",
+    flexDirection: "column",
+    justifyContent: "center",
+    backgroundColor: theme.palette.primary.dark,
+  },
+  title: {
+    flexGrow: 1,
+  },
+  form: {
+    backgroundColor: "#f2f2f2",
+    padding: theme.spacing(5),
+    borderRadius: theme.spacing(2),
+  },
+  paper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));

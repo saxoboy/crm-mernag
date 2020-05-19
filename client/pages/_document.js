@@ -10,10 +10,9 @@ export default class MyDocument extends Document {
         <Head>
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&display=swap"
-          />
+          <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width"/>
+          <link rel="icon" href="/favicon.ico" />
+          <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&display=swap" />
         </Head>
         <body>
           <Main />

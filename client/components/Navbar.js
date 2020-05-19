@@ -1,6 +1,6 @@
-import React from "react";
-import { useRouter } from "next/router";
-import clsx from "clsx";
+import React, { useContext } from "react";
+//import clsx from "clsx";
+import { AuthContext } from "../context/auth";
 
 /*MUI*/
 import { makeStyles } from "@material-ui/core/styles";
@@ -17,53 +17,10 @@ import Divider from "@material-ui/core/Divider";
 
 const drawerWidth = 250;
 
-const useStyles = makeStyles((theme) => ({
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  root: {
-    paddingLeft: "0",
-    [theme.breakpoints.up("sm")]: {
-      paddingLeft: "32px",
-    },
-    color: theme.palette.primary.contrastText,
-    zIndex: theme.zIndex.drawer - 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  toolBar: {
-    padding: 0,
-    display: "flex",
-  },
-  title: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: 16,
-  },
-  menuButtonHidden: {
-    display: "none",
-  },
-  typography: {
-    color: theme.palette.primary.contrastText,
-  },
-}));
-
 const Navbar = (props) => {
   const classes = useStyles();
-  const router = useRouter(); // Routing
+  const { user, logout } = useContext(AuthContext);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    router.push("/login");
-  };
   return (
     <HideOnScroll {...props}>
       <AppBar position="absolute" className={classes.root}>
@@ -72,9 +29,9 @@ const Navbar = (props) => {
             Nombre Page
           </Typography>
           <Typography color="inherit">
-            Hola {props.dataUser.name} (
+            Hola {user.name} (
             <Typography component="span" variant="caption" color="inherit">
-              {props.dataUser.username}
+              {user.username}
             </Typography>
             )
           </Typography>
@@ -117,3 +74,42 @@ function HideOnScroll(props) {
 }
 
 export default Navbar;
+
+const useStyles = makeStyles((theme) => ({
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  root: {
+    paddingLeft: "0",
+    [theme.breakpoints.up("sm")]: {
+      paddingLeft: "32px",
+    },
+    color: theme.palette.primary.contrastText,
+    zIndex: theme.zIndex.drawer - 1,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  toolBar: {
+    padding: 0,
+    display: "flex",
+  },
+  title: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: 16,
+  },
+  menuButtonHidden: {
+    display: "none",
+  },
+  typography: {
+    color: theme.palette.primary.contrastText,
+  },
+}));

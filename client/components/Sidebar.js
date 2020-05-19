@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import clsx from "clsx";
+
+import { AuthContext } from '../context/auth';
 
 /*MUI*/
 import { makeStyles } from "@material-ui/core/styles";
@@ -22,6 +24,131 @@ import PeopleIcon from "@material-ui/icons/People";
 import StoreIcon from "@material-ui/icons/Store";
 
 const drawerWidth = 250;
+
+const Sidebar = ({ dataUser }) => {
+  const classes = useStyles();
+  const router = useRouter();
+  const [open, setOpen] = useState(true);
+  const { user } = useContext(AuthContext);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+    //console.log("abierto");
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+    //console.log("cerrado");
+  };
+
+  return (
+    <nav>
+      <Drawer
+        variant="permanent"
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: open,
+          [classes.drawerClose]: !open,
+        })}
+        classes={{
+          paper: clsx({
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open,
+          }),
+        }}
+        anchor="left"
+        open={open}
+        onMouseEnter={handleDrawerOpen}
+      >
+        <div className={clsx(classes.toolbar, classes.head)}>
+          <div
+            className={clsx(open ? classes.headLogo : classes.headLogoClose)}
+          >
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="link logo"
+              onClick={() => {
+                router.push("/");
+              }}
+              className={classes.headIcon}
+            >
+              <MoneyIcon className={classes.headIcon} />
+            </IconButton>
+            <Typography
+              variant="body1"
+              component="p"
+              align="center"
+              className={classes.typography}
+            >
+              MERNAG
+            </Typography>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerClose}
+              className={clsx(open ? classes.headIcon : classes.hidden)}
+            >
+              <MenuIcon />
+            </IconButton>
+          </div>
+          <div className={classes.user}>
+            <div className={clsx(open ? "" : classes.hidden)}>
+              <Typography align="center" className={classes.typography}>
+                {user.name}
+              </Typography>
+              <Typography
+                align="center"
+                variant="caption"
+                component="p"
+                className={classes.typography}
+              >
+                {user.email}
+              </Typography>
+            </div>
+
+            <Avatar
+              alt="NombreUser"
+              src="https://material-ui.com/static/images/avatar/2.jpg"
+              className={classes.imgUser}
+              className={clsx(open ? classes.imgUser : classes.imgUserClose)}
+            />
+          </div>
+        </div>
+        <Divider />
+
+        <Box className={classes.menu} bgcolor="#dedede">
+          <List component="nav">
+            <ListItem button>
+              <ListItemIcon className={classes.listItemIcon}>
+                <StoreIcon />
+              </ListItemIcon>
+              <Link href="/">
+                <ListItemText primary="Dashboard" />
+              </Link>
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon className={classes.listItemIcon}>
+                <StoreIcon />
+              </ListItemIcon>
+              <Link href="/product">
+                <ListItemText primary="Productos" />
+              </Link>
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon className={classes.listItemIcon}>
+                <PeopleIcon />
+              </ListItemIcon>
+              <Link href="/user">
+                <ListItemText primary="Usuarios" />
+              </Link>
+            </ListItem>
+          </List>
+        </Box>
+      </Drawer>
+    </nav>
+  );
+};
+
+export default Sidebar;
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -107,127 +234,3 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(1),
   },
 }));
-
-const Sidebar = ({ dataUser }) => {
-  const classes = useStyles();
-  const router = useRouter();
-  const [open, setOpen] = useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-    //console.log("abierto");
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-    //console.log("cerrado");
-  };
-
-  return (
-    <nav>
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-          }),
-        }}
-        anchor="left"
-        open={open}
-        onMouseEnter={handleDrawerOpen}
-      >
-        <div className={clsx(classes.toolbar, classes.head)}>
-          <div
-            className={clsx(open ? classes.headLogo : classes.headLogoClose)}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="link logo"
-              onClick={() => {
-                router.push("/");
-              }}
-              className={classes.headIcon}
-            >
-              <MoneyIcon className={classes.headIcon} />
-            </IconButton>
-            <Typography
-              variant="body1"
-              component="p"
-              align="center"
-              className={classes.typography}
-            >
-              MERNAG
-            </Typography>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerClose}
-              className={clsx(open ? classes.headIcon : classes.hidden)}
-            >
-              <MenuIcon />
-            </IconButton>
-          </div>
-          <div className={classes.user}>
-            <div className={clsx(open ? "" : classes.hidden)}>
-              <Typography align="center" className={classes.typography}>
-                {dataUser.name}
-              </Typography>
-              <Typography
-                align="center"
-                variant="caption"
-                component="p"
-                className={classes.typography}
-              >
-                {dataUser.email}
-              </Typography>
-            </div>
-
-            <Avatar
-              alt="NombreUser"
-              src="https://material-ui.com/static/images/avatar/2.jpg"
-              className={classes.imgUser}
-              className={clsx(open ? classes.imgUser : classes.imgUserClose)}
-            />
-          </div>
-        </div>
-        <Divider />
-
-        <Box className={classes.menu} bgcolor="#dedede">
-          <List component="nav">
-            <ListItem button>
-              <ListItemIcon className={classes.listItemIcon}>
-                <StoreIcon />
-              </ListItemIcon>
-              <Link href="/">
-                <ListItemText primary="Dashboard" />
-              </Link>
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon className={classes.listItemIcon}>
-                <StoreIcon />
-              </ListItemIcon>
-              <Link href="/product">
-                <ListItemText primary="Productos" />
-              </Link>
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon className={classes.listItemIcon}>
-                <PeopleIcon />
-              </ListItemIcon>
-              <Link href="/user">
-                <ListItemText primary="Usuarios" />
-              </Link>
-            </ListItem>
-          </List>
-        </Box>
-      </Drawer>
-    </nav>
-  );
-};
-
-export default Sidebar;

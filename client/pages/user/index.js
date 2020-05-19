@@ -48,8 +48,13 @@ const Users = () => {
   };
 
   const { loading, data, error } = useQuery(USERS_GET);
-  if (loading) return null;
-  if (error) return router.push("/login");
+  if (loading) return "Cargando...";
+  if (error) {
+    setTimeout(() => {
+      router.push("/error-auth");
+    }, 100);
+    return null
+  };
 
   return (
     <>

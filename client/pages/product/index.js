@@ -74,7 +74,7 @@ const Home = () => {
 
   const { data, loading, error } = useQuery(PRODUCTS_GET);
   if (loading) {
-    return null;
+    return "Cargando...";
   }
   if (error) {
     console.log(error.message.replace("GraphQL error: ", ""));
