@@ -1,40 +1,73 @@
 import React, { useContext } from "react";
-//import clsx from "clsx";
+import { useRouter } from "next/router";
 import { AuthContext } from "../context/auth";
 
 /*MUI*/
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import useScrollTrigger from "@material-ui/core/useScrollTrigger"; //responder a las acciones de desplazamiento del usuario.
-import Slide from "@material-ui/core/Slide";
-import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
-import IconButton from "@material-ui/core/IconButton";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Hidden,
+  useScrollTrigger,
+  IconButton,
+  Slide,
+  Divider,
+} from "@material-ui/core";
+
+import MenuIcon from "@material-ui/icons/Menu";
+import MoneyIcon from "@material-ui/icons/Money";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 //import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
-import Divider from "@material-ui/core/Divider";
 
 const drawerWidth = 250;
 
 const Navbar = (props) => {
+  const { className, onSidebarOpen, ...rest } = props;
   const classes = useStyles();
+  const router = useRouter();
   const { user, logout } = useContext(AuthContext);
 
   return (
     <HideOnScroll {...props}>
       <AppBar position="absolute" className={classes.root}>
         <Toolbar className={classes.toolBar}>
+          <Hidden mdUp>
+            <IconButton
+              color="inherit"
+              aria-label="estado"
+              onClick={onSidebarOpen}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Divider variant="middle" orientation="vertical" flexItem />
+          </Hidden>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="link logo"
+            onClick={() => {
+              router.push("/");
+            }}
+            className={classes.headIcon}
+          >
+            <MoneyIcon className={classes.headIcon} />
+          </IconButton>
           <Typography variant="h6" className={classes.title} color="inherit">
-            Nombre Page
+            MERNAG
           </Typography>
-          <Typography color="inherit">
-            Hola {user.name} (
-            <Typography component="span" variant="caption" color="inherit">
-              {user.username}
+          <Hidden xsDown>
+            <Typography color="inherit">
+              Hola {user.name} {""}
+              <Hidden smDown>
+                <Typography component="span" variant="caption" color="inherit">
+                  ({""}
+                  {user.username}
+                  {""})
+                </Typography>
+              </Hidden>
             </Typography>
-            )
-          </Typography>
+          </Hidden>
           <Divider
             variant="middle"
             orientation="vertical"
@@ -48,11 +81,6 @@ const Navbar = (props) => {
           >
             <ExitToAppIcon />
           </IconButton>
-          <Divider variant="middle" orientation="vertical" flexItem />
-          <IconButton color="inherit" aria-label="estado">
-            <FormatListBulletedIcon />
-          </IconButton>
-          <Divider variant="middle" orientation="vertical" flexItem />
         </Toolbar>
       </AppBar>
     </HideOnScroll>
@@ -76,17 +104,9 @@ function HideOnScroll(props) {
 export default Navbar;
 
 const useStyles = makeStyles((theme) => ({
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
   root: {
     paddingLeft: "0",
-    [theme.breakpoints.up("sm")]: {
+    [theme.breakpoints.up("md")]: {
       paddingLeft: "32px",
     },
     color: theme.palette.primary.contrastText,
@@ -99,6 +119,12 @@ const useStyles = makeStyles((theme) => ({
   toolBar: {
     padding: 0,
     display: "flex",
+    [theme.breakpoints.up("xs")]: {
+      padding: theme.spacing(0, 2, 0, 2),
+    },
+  },
+  headIcon: {
+    margin: "0",
   },
   title: {
     flexGrow: 1,

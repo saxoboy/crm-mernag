@@ -1,14 +1,12 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import clsx from "clsx";
 
-import { AuthContext } from '../context/auth';
+import { AuthContext } from "../context/auth";
 
 /*MUI*/
 import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
@@ -17,81 +15,27 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
-import MoneyIcon from "@material-ui/icons/Money";
-import MenuIcon from "@material-ui/icons/Menu";
-//import PersonIcon from "@material-ui/icons/Person";
 import PeopleIcon from "@material-ui/icons/People";
 import StoreIcon from "@material-ui/icons/Store";
 
-const drawerWidth = 250;
+const drawerWidth = 225;
 
-const Sidebar = ({ dataUser }) => {
+const Sidebar = ({ open, variant, onClose, className, ...rest }) => {
   const classes = useStyles();
-  const router = useRouter();
-  const [open, setOpen] = useState(true);
   const { user } = useContext(AuthContext);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-    //console.log("abierto");
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-    //console.log("cerrado");
-  };
 
   return (
     <nav>
       <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
-          }),
-        }}
         anchor="left"
+        classes={{ paper: classes.drawer }}
+        onClose={onClose}
         open={open}
-        onMouseEnter={handleDrawerOpen}
+        variant={variant}
       >
-        <div className={clsx(classes.toolbar, classes.head)}>
-          <div
-            className={clsx(open ? classes.headLogo : classes.headLogoClose)}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="link logo"
-              onClick={() => {
-                router.push("/");
-              }}
-              className={classes.headIcon}
-            >
-              <MoneyIcon className={classes.headIcon} />
-            </IconButton>
-            <Typography
-              variant="body1"
-              component="p"
-              align="center"
-              className={classes.typography}
-            >
-              MERNAG
-            </Typography>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerClose}
-              className={clsx(open ? classes.headIcon : classes.hidden)}
-            >
-              <MenuIcon />
-            </IconButton>
-          </div>
+        <div {...rest} className={clsx(classes.root, className)}>
           <div className={classes.user}>
-            <div className={clsx(open ? "" : classes.hidden)}>
+            <div>
               <Typography align="center" className={classes.typography}>
                 {user.name}
               </Typography>
@@ -104,18 +48,14 @@ const Sidebar = ({ dataUser }) => {
                 {user.email}
               </Typography>
             </div>
-
             <Avatar
-              alt="NombreUser"
+              alt={user.name}
               src="https://material-ui.com/static/images/avatar/2.jpg"
               className={classes.imgUser}
-              className={clsx(open ? classes.imgUser : classes.imgUserClose)}
             />
           </div>
         </div>
-        <Divider />
-
-        <Box className={classes.menu} bgcolor="#dedede">
+        <Box className={classes.menu}>
           <List component="nav">
             <ListItem button>
               <ListItemIcon className={classes.listItemIcon}>
@@ -143,6 +83,7 @@ const Sidebar = ({ dataUser }) => {
             </ListItem>
           </List>
         </Box>
+        <Divider className={classes.divider} />
       </Drawer>
     </nav>
   );
@@ -155,57 +96,28 @@ const useStyles = makeStyles((theme) => ({
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: "nowrap",
-  },
-  drawerOpen: {
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerClose: {
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: "hidden",
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9) + 1,
+    [theme.breakpoints.up("md")]: {
+      marginTop: 64,
+      height: "calc(100% - 64px)",
     },
   },
-  head: {
-    backgroundColor: theme.palette.secondary.dark,
-    color: "#fff",
-    height: "215px",
-  },
-  typography: {
-    color: theme.palette.primary.contrastText,
-  },
-  // necessary for content to be below app bar
-  toolbar: theme.mixins.toolbar,
-
-  headLogo: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignContent: "start",
-    padding: theme.spacing(0.8),
-  },
-  headLogoClose: {
+  root: {
+    backgroundColor: theme.palette.background.paper,
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
-    alignContent: "start",
-    padding: theme.spacing(0.8),
   },
-  headIcon: {
-    margin: "0",
+  divider: {
+    margin: theme.spacing(2, 0),
+  },
+  menu: {
+    paddingTop: theme.spacing(7),
+    marginBottom: theme.spacing(2),
   },
   user: {
-    marginTop: theme.spacing(3),
+    paddingTop: theme.spacing(3),
+    backgroundColor: theme.palette.primary.light,
+    color: "#fff",
+    height: "140px",
   },
   imgUser: {
     width: theme.spacing(10),
@@ -215,20 +127,8 @@ const useStyles = makeStyles((theme) => ({
     top: "50px",
     boxSizing: "content-box",
   },
-  imgUserClose: {
-    width: theme.spacing(5),
-    height: theme.spacing(5),
-    margin: "-20px auto 0 ",
-    border: "5px solid #000",
-    top: "20px",
-    boxSizing: "content-box",
-  },
-  hidden: {
-    display: "none",
-  },
-  menu: {
-    paddingTop: theme.spacing(7),
-    backgroundColor: theme.palette.background.paper,
+  typography: {
+    color: theme.palette.primary.contrastText,
   },
   listItemIcon: {
     paddingLeft: theme.spacing(1),
