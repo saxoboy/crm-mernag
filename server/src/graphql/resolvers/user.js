@@ -37,7 +37,10 @@ export default {
           return null;
         }
         try {
-          return await user.findOne({ status: true, _id: id }, "id name username email role");
+          return await user.findOne(
+            { status: true, _id: id },
+            "id name username email role"
+          );
         } catch (err) {
           return { ok: false, message: err.message };
         }
@@ -76,7 +79,7 @@ export default {
 
     updateUser: isAuth.createResolver(
       async (root, { id, input }, { models: { user } }) => {
-        const { name, username, email, password, updated_at, role } = input;
+        const { name, username, email, password, role } = input;
         let query = { _id: id, status: true };
         let update = {
           $set: {

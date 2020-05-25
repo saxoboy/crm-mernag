@@ -5,7 +5,7 @@ import { red, blueGrey } from "@material-ui/core/colors";
 const theme = createMuiTheme({
   breakpoints: {
     keys: ["xs", "sm", "md", "lg", "xl"],
-    values: { xs: 0, lg: 1280, sm: 600, xl: 1920, md: 960 },
+    values: { xs: 0, sm: 600, md: 960, lg: 1280, xl: 1920 },
   },
   mixins: {
     toolbar: {

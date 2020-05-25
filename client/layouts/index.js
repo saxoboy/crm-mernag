@@ -1,4 +1,5 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
+import clsx from "clsx";
 import { useRouter } from "next/router";
 
 import { useQuery } from "@apollo/client";
@@ -13,13 +14,29 @@ import Main from "../components/Main";
 import { AuthContext } from "../context/auth";
 
 /* MUI */
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/styles";
+import { useMediaQuery } from "@material-ui/core";
 
 const Layout = ({ children }) => {
   const classes = useStyles(); // clases de styles
   const router = useRouter(); // routing
-  const context = useContext(AuthContext);
+  const context = useContext(AuthContext); //context
+  const theme = useTheme(); //theme de MUI
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"), {
+    defaultMatches: true,
+  });  
 
+  // responsive
+  const [openSidebar, setOpenSidebar] = useState(false);
+  const handleSidebarOpen = () => {
+    setOpenSidebar(true);
+  };
+  const handleSidebarClose = () => {
+    setOpenSidebar(false);
+  };
+  const shouldOpenSidebar = isDesktop ? true : openSidebar;
+
+  // Query ME
   const { loading, data, error } = useQuery(ME);
   if (loading) return "Cargando...";
   if (error) {
@@ -27,15 +44,24 @@ const Layout = ({ children }) => {
     router.push("/login");
     return null;
   }
-  if (data) {
-    context.user = data.me;
-  }
+  if (data) context.user = data.me;
   return (
     <>
-      <div className={classes.root}>
-        <Navbar />
-        <Sidebar />
-        <Main user={data.me}>{children}</Main>
+      <div
+        className={clsx({
+          [classes.root]: true,
+          [classes.shiftContent]: isDesktop,
+        })}
+      >
+        <Navbar onSidebarOpen={handleSidebarOpen} />
+        <Sidebar
+          onClose={handleSidebarClose}
+          open={shouldOpenSidebar}
+          variant={isDesktop ? "persistent" : "temporary"}
+        />
+        <Main user={data.me} className={classes.content}>
+          {children}
+        </Main>
       </div>
     </>
   );
@@ -45,6 +71,16 @@ export default Layout;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
+    paddingTop: 56,
+    height: "100%",
+    [theme.breakpoints.up("sm")]: {
+      paddingTop: 64,
+    },
+  },
+  shiftContent: {
+    paddingLeft: 240,
+  },
+  content: {
+    height: "100%",
   },
 }));

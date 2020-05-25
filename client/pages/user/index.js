@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import Layout from "../../layouts";
 
 import { useQuery } from "@apollo/client";
@@ -7,34 +8,23 @@ import { USERS_GET } from "../../graphql/user/query";
 
 /*MUI*/
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
+import { Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Button, TablePagination } from "@material-ui/core"
 
-const useStyles = makeStyles({
-  root: {
-    width: "100%",
-  },
-  container: {
-    maxHeight: 440,
-  },
-});
+import UserList from "../../components/users/UserList";
+
 const columns = [
   { id: "name", label: "Nombre", minWidth: 100 },
   { id: "username", label: "User Name", minWidth: 100 },
-  { id: "email", label: "E-Mail", minWidth: 170 },
+  { id: "email", label: "E-Mail", minWidth: 150 },
+  { id: "role", label: "Rol", minWidth: 70, align: "center" },
   { id: "created_at", label: "Creado", minWidth: 100, align: "center" },
   { id: "updated_at", label: "Actualizado", minWidth: 100, align: "center" },
-  { id: "role", label: "Rol", minWidth: 70, align: "center" },
+  { id: "actions", label: "Acciones", minWidth: 100, align: "center" },
 ];
 
 const Users = () => {
   const classes = useStyles(); //Styles para MUI
+  const router = useRouter(); // routing
   const [page, setPage] = useState(0); // State Paginación
   const [rowsPerPage, setRowsPerPage] = useState(10); // State Datos por pagina
 
@@ -53,8 +43,8 @@ const Users = () => {
     setTimeout(() => {
       router.push("/error-auth");
     }, 100);
-    return null
-  };
+    return null;
+  }
 
   return (
     <>
@@ -62,7 +52,26 @@ const Users = () => {
         <title>Usuarios - MERNAG + Apollo + GraphQL</title>
       </Head>
       <Layout>
-        <h1>Listado de Usuarios</h1>
+        <Box className={classes.title}>
+          <Typography
+            paragraph
+            className={classes.titleTex}
+            component="h1"
+            variant="h5"
+            color="initial"
+            paragraph
+          >
+            Listado de Usuarios
+          </Typography>
+          <Button
+            href="/user/new"
+            color="primary"
+            variant="contained"
+            size="small"
+          >
+            Nuevo Usuario
+          </Button>
+        </Box>
         <Paper className={classes.root}>
           <TableContainer className={classes.container}>
             <Table stickyHeader aria-label="sticky table">
@@ -83,23 +92,7 @@ const Users = () => {
                 {data.getUsers
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => {
-                    return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.id}
-                      >
-                        {columns.map((column) => {
-                          const value = row[column.id];
-                          return (
-                            <TableCell key={column.id} align={column.align}>
-                              { value }
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    );
+                    return <UserList key={row.id} userData={row} />;
                   })}
               </TableBody>
             </Table>
@@ -111,3 +104,23 @@ const Users = () => {
 };
 
 export default Users;
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+  },
+  container: {
+    maxHeight: 440,
+  },
+  title: {
+    display: "flex",
+    marginBottom: theme.spacing(3),
+    alignItems: "center",
+    [theme.breakpoints.down("xs")]: {
+      display: "block",
+    },
+  },
+  titleTex: {
+    flexGrow: 1,
+  },
+}));

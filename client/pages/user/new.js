@@ -17,31 +17,8 @@ import {
   TextField,
   Box,
   Button,
-  Grid,
 } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    color: "#fff",
-  },
-  title: {
-    flexGrow: 1,
-  },
-  form: {
-    backgroundColor: "#f2f2f2",
-    padding: theme.spacing(5),
-    borderRadius: theme.spacing(2),
-  },
-  paper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
 
 const Usernew = () => {
   const classes = useStyles(); // Styles para MUI
@@ -83,7 +60,7 @@ const Usernew = () => {
           setMensaje(data.createUser.message);
           setTimeout(() => {
             setMensaje(null);
-            router.push("/login");
+            router.push("/user");
           }, 3000);
         } else {
           setMensaje(
@@ -94,7 +71,7 @@ const Usernew = () => {
           }, 3000);
         }
       } catch (errors) {
-        setMensaje(errors.message.replace('GraphQL error: ',''));
+        setMensaje(errors.message.replace("GraphQL error: ", ""));
         setTimeout(() => {
           setMensaje(null);
         }, 3000);
@@ -188,14 +165,6 @@ const Usernew = () => {
                 Nuevo Usuario
               </Button>
             </Box>
-
-            <Grid container>
-              <Grid item>
-                <Link href="/register">
-                  <a>{"Sign Up"}</a>
-                </Link>
-              </Grid>
-            </Grid>
           </form>
         </Container>
       </Layout>
@@ -204,3 +173,25 @@ const Usernew = () => {
 };
 
 export default Usernew;
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    color: "#fff",
+  },
+  title: {
+    flexGrow: 1,
+  },
+  form: {
+    backgroundColor: "#fff",
+    padding: theme.spacing(5),
+    borderRadius: theme.spacing(2),
+  },
+  paper: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));

@@ -13,3 +13,19 @@ export const USERS_GET = gql`
     }
   }
 `;
+
+export const USER_GET = gql`
+  query getUser($id: ID!) {
+    getUser(id: $id) {
+      id
+      name
+      username
+      email
+      password
+      role
+      created_at
+      updated_at
+      status
+    }
+  }
+`;

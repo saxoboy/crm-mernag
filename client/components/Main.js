@@ -18,5 +18,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     marginTop: "100px",
     width: "100%",
+    [theme.breakpoints.up("xs")]: {
+      marginTop: theme.spacing(4),
+    },
   },
 }));
