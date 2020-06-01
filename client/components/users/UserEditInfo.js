@@ -6,7 +6,7 @@ import * as Yup from "yup";
 /*APOLLO*/
 import { useQuery, useMutation } from "@apollo/client";
 import { USER_GET } from "../../graphql/user/query";
-import { USER_UPDATE } from "../../graphql/user/mutation";
+import { USER_INFO_UPDATE } from "../../graphql/user/mutation";
 
 /*MUI*/
 import { makeStyles } from "@material-ui/core/styles";
@@ -28,7 +28,7 @@ const UserEditInfo = () => {
     },
   });
   // Actualizar el cliente
-  const [updateUser] = useMutation(USER_UPDATE);
+  const [updateInfoUser] = useMutation(USER_INFO_UPDATE);
 
   // Schema de validacion
   const schemaValidacion = Yup.object({
@@ -49,26 +49,26 @@ const UserEditInfo = () => {
 
   //datos del form
   const actualizarInfoUsuario = async (values) => {
-    const { name, username, email } = values;  
+    const { name, username, email } = values;
     try {
-      const { data } = await updateUser({
+      const { data } = await updateInfoUser({
         variables: {
           id,
           input: {
             name,
             username,
-            email
+            email,
+            photo: getUser.photo
           },
         },
-      });
-      console.log(data);
-      const { ok, message } = data;
+      });  
+      const { ok, message } = data.updateInfoUser;
       if (ok) {
         setMensaje(message);
         setTimeout(() => {
           setMensaje(null);
           router.push("/user");
-        }, 300);
+        }, 3000);
       } else {
         setMensaje(message.replace("User validation failed: ", ""));
         setTimeout(() => {
@@ -76,21 +76,21 @@ const UserEditInfo = () => {
         }, 2000);
       }
     } catch (errors) {
-      //console.log(data);
       setMensaje(errors.message.replace("GraphQL error: ", ""));
       setTimeout(() => {
         setMensaje(null);
       }, 3000);
+      console.log(errors);
     }
   };
-
-  const mostrarMensaje = () => {
+  const mostrarMensaje = (errors) => {
     return (
       <Alert variant="filled" severity="info">
         {mensaje}
       </Alert>
     );
   };
+
   return (
     <div>
       {mensaje && mostrarMensaje()}
