@@ -1,18 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Layout from "../../layouts";
+import { AuthContext } from "../../context/auth"
 
 import { useQuery } from "@apollo/client";
 import { USERS_GET } from "../../graphql/user/query";
 
 /*MUI*/
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Button, TablePagination } from "@material-ui/core"
+import {
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Box,
+  Button,
+  TablePagination,
+} from "@material-ui/core";
 
 import UserList from "../../components/users/UserList";
 
 const columns = [
+  { id: "photo", label: "Imagen", maxWidth: 100 },
   { id: "name", label: "Nombre", minWidth: 100 },
   { id: "username", label: "User Name", minWidth: 100 },
   { id: "email", label: "E-Mail", minWidth: 150 },
@@ -27,6 +41,7 @@ const Users = () => {
   const router = useRouter(); // routing
   const [page, setPage] = useState(0); // State Paginación
   const [rowsPerPage, setRowsPerPage] = useState(10); // State Datos por pagina
+  const { user } = useContext(AuthContext); //context de UserLogin
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -63,14 +78,16 @@ const Users = () => {
           >
             Listado de Usuarios
           </Typography>
-          <Button
-            href="/user/new"
-            color="primary"
-            variant="contained"
-            size="small"
-          >
-            Nuevo Usuario
-          </Button>
+          {user.role === "ADMIN" && (
+            <Button
+              href="/user/new"
+              color="primary"
+              variant="contained"
+              size="small"
+            >
+              Nuevo Usuario
+            </Button>
+          )}
         </Box>
         <Paper className={classes.root}>
           <TableContainer className={classes.container}>
@@ -110,7 +127,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   container: {
-    maxHeight: 440,
+    maxHeight: 780,
   },
   title: {
     display: "flex",

@@ -7,6 +7,7 @@ export const USERS_GET = gql`
       name
       username
       email
+      photo
       created_at
       updated_at
       role
@@ -21,6 +22,7 @@ export const USER_GET = gql`
       name
       username
       email
+      photo
       password
       role
       created_at

@@ -17,6 +17,7 @@ let userSchema =  new Schema({
     username: {
         type: String,
         unique: true,
+        required: [true, 'The username is necessary'],
         trim: true
     },
     email: {
@@ -24,6 +25,9 @@ let userSchema =  new Schema({
         unique: true,
         required: [true, 'The email is necessary'],
         trim: true
+    },
+    photo: {
+        type: String,
     },
     password: {
         type: String,

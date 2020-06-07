@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
   const theme = useTheme(); //theme de MUI
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"), {
     defaultMatches: true,
-  });  
+  });
 
   // responsive
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -37,10 +37,13 @@ const Layout = ({ children }) => {
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
   // Query ME
-  const { loading, data, error } = useQuery(ME);
+  const { loading, data, error, client } = useQuery(ME, {
+    fetchPolicy: "network-only",
+  });
   if (loading) return "Cargando...";
   if (error) {
     console.log(error.message.replace("GraphQL error: ", ""));
+    context.logout().then(() => client.resetStore());
     router.push("/login");
     return null;
   }

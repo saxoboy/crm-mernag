@@ -1,13 +1,16 @@
 import React from "react";
 import { useRouter } from "next/router";
+import moment from "moment";
+moment.locale("es");
 
 /*MUI*/
 import { makeStyles } from "@material-ui/core/styles";
-import { TableRow, TableCell, IconButton } from "@material-ui/core";
+import { TableRow, TableCell, IconButton, CardMedia } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 
 const columns = [
+  { id: "photo", label: "Imagen", maxWidth: 100 },
   { id: "name", label: "Nombre", minWidth: 100 },
   { id: "username", label: "User Name", minWidth: 100 },
   { id: "email", label: "E-Mail", minWidth: 150 },
@@ -23,8 +26,8 @@ const UserList = ({ userData }) => {
   const editUser = (id) => {
     router.push({
       pathname: "/user/edit/[id]",
-      query: { id }
-  })
+      query: { id },
+    });
   };
   return (
     <TableRow hover role="checkbox" tabIndex={-1} key={userData.id}>
@@ -32,7 +35,23 @@ const UserList = ({ userData }) => {
         const value = userData[column.id];
         return (
           <TableCell key={column.id} align={column.align}>
-            {column.id === "actions" ? (
+            {column.id === "photo" && (
+              <CardMedia
+                className={classes.media}
+                image={value}
+                title="imagen"
+                alt="user"
+                component="div"
+              />
+            )}
+            {column.id !== "updated_at" &&
+              column.id !== "created_at" &&
+              column.id !== "actions" &&
+              column.id !== "photo" &&
+              value}
+            {column.id === "created_at" && moment(value).fromNow()}
+            {column.id === "updated_at" && moment(value).fromNow()}
+            {column.id === "actions" && (
               <>
                 <IconButton
                   aria-label="editar"
@@ -45,8 +64,6 @@ const UserList = ({ userData }) => {
                   <DeleteIcon />
                 </IconButton>
               </>
-            ) : (
-              value
             )}
           </TableCell>
         );
@@ -60,5 +77,11 @@ export default UserList;
 const useStyles = makeStyles((theme) => ({
   margin: {
     textAlign: "center",
+  },
+  media: {
+    width: "110px",
+    height: 0,
+    paddingTop: "110px",
+    borderRadius: theme.spacing(1),
   },
 }));

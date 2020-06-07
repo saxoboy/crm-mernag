@@ -10,9 +10,9 @@ export const USER_NEW = gql`
   }
 `;
 
-export const USER_UPDATE = gql`
-  mutation updateUser($id: ID!, $input: UserInput!) {
-    updateUser(id: $id, input: $input) {
+export const USER_INFO_UPDATE = gql`
+  mutation updateInfoUser($id: ID!, $input: UserInput!) {
+    updateInfoUser(id: $id, input: $input) {
       ok
       message
       data

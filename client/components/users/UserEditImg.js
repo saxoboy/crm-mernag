@@ -5,7 +5,6 @@ import axios from "axios";
 /*MUI*/
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  Typography,
   Button,
   CardContent,
   Fab,
@@ -38,6 +37,7 @@ const UserEditImg = () => {
     },
   });
   const { name, username, email, photo } = data.getUser;
+  
   // Actualizar imagen del cliente
   const [updateInfoUser] = useMutation(USER_INFO_UPDATE);
 
@@ -84,7 +84,7 @@ const UserEditImg = () => {
         setTimeout(() => {
           setMensaje(null);
           handleDeleteDraft();  
-          router.push("/user");
+          //router.push("/user");
         }, 3000);
       } else {
         setMensaje(message.replace("User validation failed: ", ""));
@@ -109,7 +109,7 @@ const UserEditImg = () => {
     }, 100);
     return null;
   }
-  const mostrarMensaje = (errors) => {
+  const mostrarMensaje = () => {
     return (
       <Alert variant="filled" severity="info">
         {mensaje}
@@ -120,17 +120,6 @@ const UserEditImg = () => {
   return (
     <>
       {mensaje && mostrarMensaje()}
-      <Typography
-        paragraph
-        className={classes.titleTex}
-        component="h3"
-        variant="h5"
-        color="initial"
-        paragraph
-      >
-        Editar o Subir Imagen de Perfil
-      </Typography>
-
       <form className={classes.form}>
         <CardContent>
           <CardMedia
@@ -140,6 +129,7 @@ const UserEditImg = () => {
             alt={name}
             component="div"
           />
+          <div style={{textAlign: "center"}}>
           <input
             accept="image/*"
             id="image"
@@ -157,6 +147,7 @@ const UserEditImg = () => {
               <AddAPhotoIcon className={classes.leftIcon} /> Upload photo
             </Button>
           </label>
+          </div>
           <div>
             <Button
               onClick={handleDeleteDraft}
@@ -203,7 +194,7 @@ const useStyles = makeStyles((theme) => ({
     height: 0,
     paddingTop: "200px",
     borderRadius: theme.spacing(1),
-    marginBottom: theme.spacing(3),
+    margin: "auto",
   },
   input: {
     display: "none",
@@ -217,6 +208,6 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(1),
   },
   button: {
-    margin: theme.spacing(2),
+    margin: theme.spacing(2, 2, 0, 2),
   },
 }));

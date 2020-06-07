@@ -8,6 +8,7 @@ type User {
   name: String
   username: String
   email: String
+  photo: String
   password: String
   created_at: Date
   updated_at: Date
@@ -19,6 +20,7 @@ type UserLogin {
   name: String
   username: String
   email: String
+  photo: String
   role: Roles
 }
 
@@ -29,7 +31,25 @@ input UserInput {
   password: String
   created_at: Date
   updated_at: Date
-  role: Roles
+  role: Roles!
+}
+
+input UserInputInfo {
+  name: String!
+  username: String!
+  email: String!  
+  updated_at: Date
+  role: Roles!
+}
+
+input UserInputPhoto {  
+  photo: String!
+  updated_at: Date
+}
+
+input UserInputPassword {  
+  password: String!
+  updated_at: Date
 }
 
 extend type Query {
@@ -39,12 +59,17 @@ extend type Query {
 }
 
 extend type Mutation {
-  createUser(input: UserInput!): Response
-  updateUser(id: ID!, input: UserInput!): Response
+  createUser(input: UserInput!): Response  
+  updateInfoUser(id: ID!, input: UserInputInfo!): Response
+  updatePhotoUser(id: ID!, input: UserInputPhoto!): Response
+  updatePasswordUser(id: ID!, input: UserInputPassword!): Response
   deleteUser(id: ID!): Response
 }
 
 extend type Subscription {
   newUser: User!
-  updateUser: User!
+  updateInfoUser: User!  
 }
+
+#updateUser(id: ID!, input: UserInput!): Response //mutation
+#updateUser: User! //suscripcion

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState,  useContext  } from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Layout from "../../../layouts";
 
+// apollo
 import { useQuery } from "@apollo/client";
 import { USER_GET } from "../../../graphql/user/query";
 
@@ -11,9 +12,9 @@ import { USER_GET } from "../../../graphql/user/query";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Typography, Paper, Tabs, Tab } from "@material-ui/core";
 
-import UserEditInfo from "../../../components/users/UserEditInfo"
-import UserEditImg from "../../../components/users/UserEditImg"
-import UserEditPassword from "../../../components/users/UserEditPassword"
+//Components
+import UserEditInfo from "../../../components/users/UserEditInfo";
+import UserEditPassword from "../../../components/users/UserEditPassword";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -26,11 +27,7 @@ function TabPanel(props) {
       aria-labelledby={`vertical-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box p={3}>
-          {children}
-        </Box>
-      )}
+      {value === index && <Box p={3}>{children}</Box>}
     </div>
   );
 }
@@ -44,15 +41,14 @@ function a11yProps(index) {
 const EditUser = () => {
   const classes = useStyles(); //Styles para MUI
   const router = useRouter();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(0);  
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const {
-    query: { id },
-  } = router;
+  const {query: { id }} = router;
+  
   // Consultar para obtener el cliente
   const { data, loading, error } = useQuery(USER_GET, {
     variables: {
@@ -96,19 +92,16 @@ const EditUser = () => {
             aria-label="Vertical tabs example"
             className={classes.tabs}
           >
-            <Tab label="General" {...a11yProps(0)} />
-            <Tab label="Imagen" {...a11yProps(1)} />
-            <Tab label="Password" {...a11yProps(2)} />
+            <Tab label="Perfile" {...a11yProps(0)} />
+            <Tab label="Password" {...a11yProps(1)} />
+
           </Tabs>
-          <TabPanel value={value} index={0}>
+          <TabPanel value={value} index={0} style={{width: "100%"}} >
             <UserEditInfo />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <UserEditImg />
-          </TabPanel>
-          <TabPanel value={value} index={2}>
             <UserEditPassword />
-          </TabPanel>
+          </TabPanel>        
         </Paper>
       </Layout>
     </>

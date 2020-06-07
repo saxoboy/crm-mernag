@@ -50,7 +50,7 @@ const Sidebar = ({ open, variant, onClose, className, ...rest }) => {
             </div>
             <Avatar
               alt={user.name}
-              src="https://material-ui.com/static/images/avatar/2.jpg"
+              src={user.photo}
               className={classes.imgUser}
             />
           </div>

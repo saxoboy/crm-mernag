@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Layout from "../../layouts";
+import { AuthContext } from "../../context/auth"
 
 import { useMutation } from "@apollo/client";
 import { USER_NEW } from "../../graphql/user/mutation";
@@ -22,10 +22,19 @@ import { Alert } from "@material-ui/lab";
 
 const Usernew = () => {
   const classes = useStyles(); // Styles para MUI
-  const router = useRouter(); // Routing
+  const router = useRouter(); // Routing  
   const [mensaje, setMensaje] = useState(null); // State para el mensaje
-  const [createUser] = useMutation(USER_NEW); // Mutation para crear nuevos usuarios
+  const context = useContext(AuthContext); //context de UserLogin
+  // si el usuario login no tiene role = ADMIN, no puede entrar aquí
+  console.log(context.user.role);
+  // if(user.role !== "ADMIN"){
+  //   setTimeout(() => {
+  //     return "no tienes permiso para esta operación, usted no es ADMIN"
+  //   }, 5000);
+  //   router.push("/error-auth");  
+  // }
 
+  const [createUser] = useMutation(USER_NEW); // Mutation para crear nuevos usuarios
   const formik = useFormik({
     initialValues: {
       name: "",

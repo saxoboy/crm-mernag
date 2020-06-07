@@ -10,7 +10,6 @@ const AuthContext = createContext({
   user: null,
   login: (token) => {},
   logout: () => {},
-  //isLogin: (me) => {},
 });
 
 function authReducer(state, action) {
@@ -25,11 +24,6 @@ function authReducer(state, action) {
         ...state,
         user: null,
       };
-    // case "IS_LOGIN":
-    //   return {
-    //     ...state,
-    //     user: state.user,
-    //   };
     default:
       return state;
   }
@@ -74,27 +68,3 @@ function AuthProvider(props) {
 }
 
 export { AuthContext, AuthProvider };
-
-  // useEffect(() => {
-  //   if (localStorage.getItem("token")) {
-  //     const decodedToken = jwtDecode(localStorage.getItem("token"));
-
-  //     if (decodedToken.exp * 1000 < Date.now()) {
-  //       localStorage.removeItem("token");
-  //       console.log("session expirada");
-  //     } else {
-  //       initialState.user = decodedToken;
-  //       dispatch({
-  //         type: "IS_LOGIN",
-  //         payload: initialState.user,
-  //       });
-  //     }
-  //   }
-
-  //   if (!initialState.user || initialState.user == "undefined") {
-  //     router.push("/login");
-  //     console.log(
-  //       "Usuario es " + initialState.user + ". Se redireccionó a Login"
-  //     );
-  //   }
-  // }, []);
