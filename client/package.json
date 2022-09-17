@@ -13,7 +13,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.50",
     "apollo-link-context": "^1.0.20",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "formik": "^2.1.4",
     "graphql": "^15.0.0",
     "jwt-decode": "^2.2.0",
